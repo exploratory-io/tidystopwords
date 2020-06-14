@@ -1,3 +1,20 @@
+fix_datatypes <- function(stoplist_db){
+  if(nrow(stoplist_db) == 0) { # if zero, column data type is detected as logical so set correct data types.
+    stoplist_db <- dplyr::mutate(stoplist_db, 
+                                 language_id = as.character(language_id),
+                                 language_name = as.character(language_name),
+                                 POS = as.character(POS),
+                                 UFeat = as.character(UFeat),
+                                 lemma = as.character(lemma),
+                                 word_form = as.character(word_form),
+                                 freq_formUFeatPOS = as.integer(freq_formUFeatPOS),
+                                 freq_formPOS = as.integer(freq_formPOS),
+                                 freq_form = as.integer(freq_form),
+                                 prop_wformpos_wform = as.integer(prop_wformpos_wform))
+  }
+  stoplist_db
+}
+
 generate_stoplist <- function(lang_name = NULL, 
                               lang_id = NULL,
                               output_form = "vector",
@@ -106,6 +123,7 @@ if (is.null(lang_name) & is.null(lang_id) )
   # The final stoplist will be generated from wordforms of the stoplist data frame after all. 
   stoplist_db <- matrix(nrow = 0, ncol = ncol(multilingual_stoplist)) %>% as.data.frame(stringsAsFactors = FALSE) 
   colnames(stoplist_db) = colnames(multilingual_stoplist)
+  stoplist_db <- fix_datatypes(stoplist_db)
  
  
    ##stop_lemmas: a character vector or a single string from user
