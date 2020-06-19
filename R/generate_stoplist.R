@@ -123,6 +123,9 @@ if (is.null(lang_name) & is.null(lang_id) )
   # The final stoplist will be generated from wordforms of the stoplist data frame after all. 
   stoplist_db <- matrix(nrow = 0, ncol = ncol(multilingual_stoplist)) %>% as.data.frame(stringsAsFactors = FALSE) 
   colnames(stoplist_db) = colnames(multilingual_stoplist)
+  # With R4.0 and dplyr 1.0.0, the stoplist_db, which is used to bind with other stopwords, has all column data type as logical.
+  # This causes a problem when bind_rows is called with it because column data types do not match.
+  # To address this, call fix_datatype and set correct data types to columns.
   stoplist_db <- fix_datatypes(stoplist_db)
  
  
